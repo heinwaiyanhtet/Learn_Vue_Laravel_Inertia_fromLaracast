@@ -9,9 +9,8 @@
     <script src="{{ mix('/js/vendor.js') }}" defer></script>
     <script src="{{ mix('/js/app.js') }}" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    @inertiaHead
 </head>
 <body>
-        @inertia
+    @inertia
 </body>
 </html>
