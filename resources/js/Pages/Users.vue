@@ -10,9 +10,7 @@
 <script>
 
 import {Link} from "@inertiajs/inertia-vue3";
-import Layout from "../Shared/Layout";
 export default {
-    layout : Layout,
     props: {
         time: String,
         Link
