@@ -29,7 +29,6 @@ import { Head } from "@inertiajs/inertia-vue3";
 
 export default {
     components: { Nav,Head },
-
     computed: {
         username() {
             return this.$page.props.auth.user.username;

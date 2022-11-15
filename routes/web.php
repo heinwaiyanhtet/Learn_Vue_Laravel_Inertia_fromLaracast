@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,7 +12,6 @@ use Inertia\Inertia;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Route::get('/', function () {
     return Inertia::render( 'Home');
 });
@@ -21,10 +19,18 @@ Route::get('/', function () {
 Route::get('/users', function () {
     return Inertia::render( 'Users',[
 //        'time' => now()->toTimeString()
-          'users' => \App\Models\User::paginate(10)->through(fn($user)=>[
-              'id' => $user->id,
-              'name' => $user->name
-          ])
+          'users' => \App\Models\User::query()
+              ->when(Request::input('search'),function ($query,$search){
+                      $query->where('name','like',"%{$search}%");
+                  })
+              ->paginate(10)
+              ->withQueryString()
+              ->through(fn($user)=>[
+                  'id' => $user->id,
+                  'name' => $user->name
+              ]),
+          'filters' => Request::only(['search']),
+
     ]);
 });
 

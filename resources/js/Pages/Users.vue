@@ -1,6 +1,9 @@
 <template>
     <Head title="Users"/>
-    <h1 class="text-3xl">Users</h1>
+    <div class="flex justify-between mb-6">
+        <h1 class="text-3xl">Users</h1>
+        <input v-model="search" type="text" placeholder="Search..." class="border px-2 rounded-lg">
+    </div>
     <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <tbody>
@@ -18,16 +21,26 @@
             </tbody>
         </table>
     </div>
-
     <Pagination :links="users.links" class="mt-6"/>
 </template>
 
 <script setup>
 import Pagination from "../Shared/Pagination";
+import {ref, watch} from "vue";
+import {Inertia} from "@inertiajs/inertia";
 
-defineProps({
-    // time: String,
+let props = defineProps({
     users:Object,
+    filters:Object
+})
+
+let search = ref(props.filters.search);
+
+watch(search,value => {
+    Inertia.get('/users',{search:value},{
+        preserveState:true,
+        replace:true
+    });
 })
 </script>
 <style scoped>
