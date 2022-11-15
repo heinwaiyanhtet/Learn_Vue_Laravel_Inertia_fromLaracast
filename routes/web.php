@@ -1,7 +1,6 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,12 +11,17 @@ use Inertia\Inertia;
 | contains the "web" middleware group. Now create something great!
 |
 */
+use App\Models\User;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
+
 Route::get('/', function () {
     return Inertia::render( 'Home');
 });
 
 Route::get('/users', function () {
-    return Inertia::render( 'Users',[
+    return Inertia::render( 'Users/Index',[
 //        'time' => now()->toTimeString()
           'users' => \App\Models\User::query()
               ->when(Request::input('search'),function ($query,$search){
@@ -32,6 +36,23 @@ Route::get('/users', function () {
           'filters' => Request::only(['search']),
 
     ]);
+});
+
+Route::get('/users/create', function () {
+    return Inertia::render('Users/Create');
+});
+
+Route::post('/users', function () {
+    //validate the request
+    $attributes = Request::validate([
+        'name'=>'required',
+        'email'=> ['required','email'],
+        'password'=>'required'
+    ]);
+    //create the user
+    User::create($attributes);
+    //redirect
+    return redirect('/users');
 });
 
 Route::get('/settings', function () {
